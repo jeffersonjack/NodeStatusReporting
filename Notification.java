@@ -15,7 +15,10 @@ public class Notification implements Comparable<Notification> {
     private String name;
     private Message msg;
     private String friend;
-    
+
+    /**
+     * Allocates memory for the variables.
+     */
     public Notification() {
         timeReceived = new Date();
         timeGenerated = new Date();
@@ -25,10 +28,11 @@ public class Notification implements Comparable<Notification> {
     /**
      * Creates a new Notification object from the status line that was sent by the node.
      * @param line the notification text
+     * @throws DataFormatException if the data is not of the expected format
     */
     public Notification(String line) throws DataFormatException {
         this();
-        
+
         String[] fields = line.split("\\s+");
         if (fields.length != 4 && fields.length != 5) {
             throw new DataFormatException("Too many fields given");
@@ -73,7 +77,14 @@ public class Notification implements Comparable<Notification> {
     public String getFriend() {
         return this.friend;
     }
-    
+
+    public Date getTimeGenerated() {
+        return this.timeGenerated;
+    }
+
+    /**
+     * Returns a string representation of the notification. Used for testing purposes only.
+     */
     public String toString() {
         String s = "Notification\n------------";
         s += "\nTime generated: " + timeGenerated;
@@ -92,10 +103,13 @@ public class Notification implements Comparable<Notification> {
                 break;
         }
         s += "\n";
-        
+
         return s;
     }
 
+    /**
+     * Returns a string representation of the parts needed on the status line.
+     */
     public String toSimpleString() {
         String s = new String();
         s += timeReceived.getTime();
@@ -112,10 +126,6 @@ public class Notification implements Comparable<Notification> {
                 break;
         }
         return s;
-    }
-
-    public Date getTimeGenerated() {
-        return this.timeGenerated;
     }
 
     @Override

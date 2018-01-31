@@ -50,11 +50,15 @@ class NodeStatusReporting {
             System.exit(4);
         }
 
+        // Sort the notifications by the time they were generated
         Collections.sort(notifications);
 
+        // Iterate through each notification and generate statuses for each
         for(Notification n : notifications) {
+            // First, make a status for the node who sent the notification
             Status stat = new Status(n.getName(), n);
-            
+
+            // (we may have to also deal with the node who was lost or found)
             for (int i = 0; i < 2; i++) {
                 // Check if there is already a notification for this node
                 if (statuses.containsKey(stat.getSubject())) {
@@ -64,7 +68,7 @@ class NodeStatusReporting {
                     if (Math.abs(stat.getTimeGenerated().getTime() - stack.peek().getTimeGenerated().getTime()) <= 50) {
                         // ...then we can't be sure of the order in which they occurred. So if the
                         // statuses differ...
-                        if (stat.getLiving() != stack.peek().getLiving()) {                    
+                        if (stat.getLiving() != stack.peek().getLiving()) {
                             // ...set both statuses to UNKNOWN...
                             stack.peek().setLiving(Living.UNKNOWN);
                             stat.setLiving(Living.UNKNOWN);
@@ -82,32 +86,17 @@ class NodeStatusReporting {
                 // If the notification is not a HELLO, process the status of the friend
                 if (n.getMessage() != Message.HELLO) {
                     stat = new Status(n.getFriend(), n);
-                } else break;
+                } else {
+                    // If the notification was a HELLO, then we only need to produce one status
+                    break;
+                }
             }
         }
 
         // Output the statuses
         for (Stack<Status> statusStack : statuses.values()) {
+            // Print only the most recent status for each node
             System.out.println(statusStack.peek());
         }
-        
-
-
-        
-        
-
-        //for (Notification not : notifications) {
-        //    System.out.println(not);
-        //}
-
-        /*
-        Date d = new Date();
-        d.setTime(Long.parseLong("1508405807242", 10));
-        System.out.println("Date is " + d);
-
-        String line = new String("one	two        three		four");
-        String[] fields = line.split("\\s+");
-        System.out.println("<" + fields[0] + ">, <" + fields[1] + ">, <" + fields[2] + ">, <" + fields[3] + ">");
-        */
     }
 }

@@ -2,6 +2,9 @@ import java.util.Date;
 
 enum Living {ALIVE, DEAD, UNKNOWN}
 
+/**
+ * Represents the status of a node (whether it is alive, dead, or unknown at a certain time).
+ */
 public class Status {
     private String subject;
     private Living living;
@@ -15,7 +18,7 @@ public class Status {
     public Status(String name, Notification n) {
         this.subject = name;
         this.notif = n;
-        
+
         if (this.subject == this.notif.getName()) {
             // If the subject sent the notification, then they are alive
             this.living = Living.ALIVE;
@@ -50,6 +53,9 @@ public class Status {
         this.living = l;
     }
 
+    /**
+     * A string representation of the status.
+     */
     public String toString() {
         String s = new String(subject);
         switch (this.living) {
